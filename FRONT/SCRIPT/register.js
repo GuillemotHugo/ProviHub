@@ -39,5 +39,3 @@ const submitRegister = async () => {
         resultDiv.style.color = color;
     }
 };
-
-document.getElementById('submitRegister').addEventListener('click', submitRegister);

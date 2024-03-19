@@ -1,9 +1,8 @@
 document.getElementById('Logout').addEventListener('click', () => {
-    deleteCookie('ProviHub-Token');         
-    })
+    deleteCookie();
+    window.location.reload();
+});
 
-    function deleteCookie(name) {
-        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    }
-    
-  
+function deleteCookie() {
+    document.cookie = 'ProviHub-Token' + '=; Max-Age=-99999999;';
+}

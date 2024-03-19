@@ -110,6 +110,33 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// addProjet
+
+app.post('/addProjet', async (req, res) => {
+  try {
+    // Vérification des champs requis
+    const { title, lien, description } = req.body;
+    if (!title || !lien || !description) {
+      return res.status(400).json({ error: 'Les champs title, lien et description sont requis.' });
+    }
+
+    // Insertion du projet dans la base de données
+    const insertProjetQuery = 'INSERT INTO Projet (title, lien, description) VALUES (?, ?, ?)';
+    db.query(insertProjetQuery, [title, lien, description], (insertErr) => {
+      if (insertErr) {
+        console.error('Erreur lors de l\'enregistrement du projet :', insertErr);
+        return res.status(500).json({ error: 'Erreur interne du serveur.' });
+      }
+
+      res.status(201).json({ message: 'Projet ajouté avec succès.' });
+      console.log("Ajout d'un projet.");
+    });
+  } catch (error) {
+    console.error('Erreur lors de l\'ajout du projet :', error);
+    res.status(500).json({ error: 'Erreur interne du serveur.' });
+  }
+});
+
 // LANCEMENT DU SERVEUR
 app.listen(port, () => {
   console.log(`Serveur en cours d'exécution sur le port ${port}`);
