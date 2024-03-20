@@ -137,6 +137,30 @@ app.post('/addProjet', async (req, res) => {
   }
 });
 
+app.post('/research', (req, res) => {
+  const model = req.body.model;
+  console.log('Requête getByModel demandée');
+
+  // Requête SQL pour rechercher un projet par modèle ou renvoyer un nombre limité de projets aléatoires si le modèle est vide
+  const query = model
+    ? 'SELECT title, lien, description FROM Projet WHERE title LIKE ?'
+    : 'SELECT title, lien, description FROM Projet ORDER BY RAND() LIMIT 3';
+  console.log('Requête SQL effectuée');
+
+  // Exécutez la requête avec le modèle en tant que paramètre s'il est fourni
+  db.query(query, model ? [`%${model}%`] : [], (error, results) => {
+    if (error) {
+      console.error('Erreur lors de la requête SQL :', error);
+      return res.status(500).json({ error: 'Erreur lors de la recherche du projet.' });
+    }
+  console.log('Recherche effectué')
+
+    // Renvoie les résultats au format JSON
+    res.json(results);
+  });
+});
+
+
 // LANCEMENT DU SERVEUR
 app.listen(port, () => {
   console.log(`Serveur en cours d'exécution sur le port ${port}`);
